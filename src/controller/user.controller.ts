@@ -12,7 +12,6 @@ interface PayloadInterface {
     mobile: string
 }
 
-
 const generateToken = (payload: PayloadInterface) => {
     const accessToken = jwt.sign(payload, process.env.AUTH_SECRET!, {expiresIn: accessTokenExpiry})
     return accessToken
