@@ -24,6 +24,10 @@ const authSchema = new Schema({
         required: true,
         trim: true,
         unique: true
+    },
+    image: {
+        type: String,
+        default: null
     }
 
 }, {timestamps: true})
