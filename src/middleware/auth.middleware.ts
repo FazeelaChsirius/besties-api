@@ -2,14 +2,12 @@ import { NextFunction, Request, Response } from "express"
 import { CatchError, TryError } from "../utils/error"
 import jwt, { JwtPayload } from "jsonwebtoken"
 import mongoose from "mongoose"
-
 export interface PayloadInterface {
     id: mongoose.Types.ObjectId,
     fullname: string
     email: string
     mobile: string
 }
-
 export interface SessionInterfece extends Request{
     session?: PayloadInterface
 }
@@ -36,7 +34,6 @@ const AuthMiddleware = async (req: SessionInterfece, res: Response, next: NextFu
         CatchError(err, res, "Unauthorized") 
         
     }
-    
 }
 
 export default AuthMiddleware
