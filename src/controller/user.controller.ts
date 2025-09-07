@@ -3,14 +3,18 @@ import AuthModel from "../model/auth.model"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { CatchError, TryError } from "../utils/error"
+import { PayloadInterface } from "../middleware/auth.middleware"
+import mongoose from "mongoose"
 
 const accessTokenExpiry = '10m'
+// export interface PayloadInterface {
+//     id: mongoose.Types.ObjectId,
+//     fullname: string
+//     email: string
+//     mobile: string
+// }
 
-interface PayloadInterface {
-    fullname: string
-    email: string
-    mobile: string
-}
+// Here we will import PayloadInterface from auth.middleware
 
 const generateToken = (payload: PayloadInterface) => {
     const accessToken = jwt.sign(payload, process.env.AUTH_SECRET!, {expiresIn: accessTokenExpiry})

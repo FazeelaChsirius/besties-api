@@ -2,6 +2,7 @@ import { GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client } from 
 import { Request, Response } from "express"
 import { CatchError, TryError } from "../utils/error"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
+import { SessionInterfece } from "../middleware/auth.middleware"
 
 const connection = new S3Client({
     region: process.env.REGION,
