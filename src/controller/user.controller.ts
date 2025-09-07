@@ -3,16 +3,11 @@ import AuthModel from "../model/auth.model"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { CatchError, TryError } from "../utils/error"
-import { PayloadInterface } from "../middleware/auth.middleware"
+import { PayloadInterface, SessionInterface } from "../middleware/auth.middleware"
 import mongoose from "mongoose"
+import { downloadObject } from "../utils/s3"
 
 const accessTokenExpiry = '10m'
-// export interface PayloadInterface {
-//     id: mongoose.Types.ObjectId,
-//     fullname: string
-//     email: string
-//     mobile: string
-// }
 
 // Here we will import PayloadInterface from auth.middleware
 
@@ -78,6 +73,22 @@ export const getSession = async (req: Request, res: Response) => {
     } catch (err: unknown) {
         CatchError(err, res, "Invalid Session")
     } 
+}
+
+export const updateProfilePicture = async (req: SessionInterface, res: Response) => {
+    try {
+        const path = req.body.path
+    
+        if(!path || !req.session)
+            throw TryError("Failed to update profile picture", 400)
+
+        await AuthModel.updateOne({ _id: req.session.id}, {$set: {image: path}})
+        const url = await downloadObject(path)
+        res.json({image: url})
+        
+    } catch (err) {
+        CatchError(err, res, "Failed to update profile picture")
+    }
 }
 
 export const forgotPassword = (req: Request, res: Response) => {

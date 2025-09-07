@@ -8,11 +8,11 @@ export interface PayloadInterface {
     email: string
     mobile: string
 }
-export interface SessionInterfece extends Request{
+export interface SessionInterface extends Request{
     session?: PayloadInterface
 }
 
-const AuthMiddleware = async (req: SessionInterfece, res: Response, next: NextFunction) => {
+const AuthMiddleware = async (req: SessionInterface, res: Response, next: NextFunction) => {
     try {
         const accessToken = req.cookies.accessToken
 
