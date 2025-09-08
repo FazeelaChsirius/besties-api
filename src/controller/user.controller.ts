@@ -44,7 +44,8 @@ export const login = async (req: Request, res: Response) => {
             id: user._id,
             fullname: user.fullname,
             email: user.email,
-            mobile: user.mobile
+            mobile: user.mobile,
+            image: user.image ? await downloadObject(user.image) : null
         }
         const options = {
             httpOnly: true,
