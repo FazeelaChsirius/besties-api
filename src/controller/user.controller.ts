@@ -65,7 +65,7 @@ export const login = async (req: Request, res: Response) => {
 
         const {accessToken, refreshToken } = generateToken(payload)
 
-        AuthModel.updateOne({_id: user._id}, {$set: {
+        await AuthModel.updateOne({_id: user._id}, {$set: {
             refreshToken, 
             expiry: moment().add(7, 'days').toDate()
         }})
@@ -115,16 +115,17 @@ export const refreshToken = async (req: SessionInterface, res: Response) => {
             throw TryError("Failed to refresh token", 401)
 
         const {accessToken, refreshToken} = generateToken(req.session)
+
         await AuthModel.updateOne({_id: req.session.id}, {$set: {
-            refreshToken, 
+            refreshToken,
             expiry: moment().add(7, "days").toDate()
-        }})
+        }}) 
 
         res.cookie('accessToken', accessToken, getOptions('accesstoken'))
         res.cookie('refreshToken', refreshToken, getOptions('refreshtoken'))
         res.json({message: 'Token Refreshed'})
-        
+
     } catch (err) {
-        CatchError(err, res, "Failed to refresh token")
+        CatchError(err, res, "Failed to refresh token")  
     }
 }

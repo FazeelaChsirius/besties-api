@@ -1,29 +1,30 @@
 import { NextFunction, Request, Response } from "express"
 import { CatchError, TryError } from "../utils/error"
-import AuthModel from "../model/auth.model"
 import moment from "moment"
+import AuthModel from "../model/auth.model"
 import { SessionInterface } from "./auth.middleware"
 
 const RefreshToken = async (req: SessionInterface, res: Response, next: NextFunction) => {
     try {
-
-        const refreshToken = await req.cookies.refreshToken
+        const refreshToken = req.cookies.refreshToken
+        console.log('refresh token controller', refreshToken)
 
         if(!refreshToken)
-            throw TryError("failed to refresh token", 401)
+            throw TryError("Failed to refresh token", 401)
 
         const user = await AuthModel.findOne({refreshToken})
 
-        if(!user)
-            throw TryError("failed to refresh token user", 400)
+        if (!user) {
+            throw TryError("Failed to refresh token", 401)
+        }
 
         const today = moment()
-        const expiry = moment(user.expiry)
+        const expiry = moment(user?.expiry)
 
         const isExpired = today.isAfter(expiry)
 
         if(isExpired)
-            throw TryError("failed to refresh token", 401)
+            throw TryError("Failed to refresh token", 401)
 
         req.session = {
             id: user.id,
@@ -32,9 +33,9 @@ const RefreshToken = async (req: SessionInterface, res: Response, next: NextFunc
             fullname: user.fullname,
             image: user.image
         }
-        
+
         next()
-    
+
     } catch (err) {
         CatchError(err, res, "Failed to refresh token")
     }

@@ -46,8 +46,8 @@ authSchema.pre('save', async function(next) {
 })
 
 authSchema.pre('save', function(next) {
-    this.refreshToken = uuid()
-    this.expiry = moment().add(7, "days").toDate()
+    this.refreshToken = null
+    this.expiry = null
     next()
 })
 
