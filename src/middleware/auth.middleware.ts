@@ -29,6 +29,7 @@ const AuthMiddleware = async (req: SessionInterface, res: Response, next: NextFu
             fullname: payload.fullname,
             image: payload.image
         }
+        
         next()
         
     } catch (err) {
