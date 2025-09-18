@@ -6,7 +6,7 @@ const AuthRouter = Router()
 
 AuthRouter.post('/signup', signup)
 AuthRouter.post('/login', login)
-AuthRouter.post('/refresh-token', RefreshToken, refreshToken)
+AuthRouter.get('/refresh-token', RefreshToken, refreshToken)
 AuthRouter.put('/profile-picture', AuthMiddleware, updateProfilePicture)
 AuthRouter.get('/session', getSession)
 
