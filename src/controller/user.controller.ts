@@ -114,6 +114,10 @@ export const refreshToken = async (req: SessionInterface, res: Response) => {
         if(!req.session)
             throw TryError("Failed to refresh token", 401)
 
+        console.log('req session', req.session)
+
+        req.session.image = (req.session.image ? await downloadObject(req.session.image) : null)
+
         const {accessToken, refreshToken} = generateToken(req.session)
 
         await AuthModel.updateOne({_id: req.session.id}, {$set: {
