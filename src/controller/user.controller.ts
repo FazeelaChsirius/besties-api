@@ -133,3 +133,22 @@ export const refreshToken = async (req: SessionInterface, res: Response) => {
         CatchError(err, res, "Failed to refresh token")  
     }
 }
+
+export const logout = (req: Request, res: Response) => {
+    try {
+        const options = {
+            httpOnly: true,
+            maxAge: 0,
+            secure: false,
+            domain: 'localhost'
+        }
+        
+        res.clearCookie('accessToken', options)
+        res.clearCookie('refreshToken', options)
+        res.json({message: "logout Success"})
+        
+    } catch (err) {
+        CatchError(err, res, "Failed to logout")
+    }
+
+}
