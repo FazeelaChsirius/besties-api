@@ -7,8 +7,7 @@ import { SessionInterface } from "./auth.middleware"
 const RefreshToken = async (req: SessionInterface, res: Response, next: NextFunction) => {
     try {
         const refreshToken = req.cookies.refreshToken
-        console.log('refresh token controller', refreshToken)
-
+    
         if(!refreshToken)
             throw TryError("Failed to refresh token", 401)
 
