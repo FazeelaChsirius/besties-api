@@ -1,4 +1,4 @@
-import { Response } from "express"
+import { Request, Response } from "express"
 import { CatchError, TryError } from "../utils/error"
 import FriendModel from "../model/friend.model"
 import { SessionInterface } from "../middleware/auth.middleware"
@@ -19,11 +19,21 @@ export const addFriend = async (req: SessionInterface, res: Response) => {
 export const fetchFriends = async (req: SessionInterface, res: Response) => {
     try {
         const user = req.session?.id
-        const friends = await FriendModel.find({user})
+        const friends = await FriendModel.find({user}).populate('friend')
         res.json(friends)
         
     } catch (err) { 
         CatchError(err, res, "Failed to fetch friends")
+    }
+}
+
+export const deleteFriend = async (req: Request, res: Response) => {
+    try {
+        await FriendModel.deleteOne({_id: req.params.id})
+        res.json({message: "Friend deleted"})
+        
+    } catch (err) { 
+        CatchError(err, res, "Failed to delete friend")
     }
 }
 
@@ -52,6 +62,6 @@ export const suggestedFriends = async (req: SessionInterface, res: Response) => 
         res.json(filtered)
        
     } catch (err) { 
-        CatchError(err, res, "Failed to fetch friends")
+        CatchError(err, res, "Failed to suggest friends")
     }
 }
