@@ -8,8 +8,8 @@ import mongoose from "mongoose"
 export const addFriend = async (req: SessionInterface, res: Response) => {
     try {
         req.body.user = req.session?.id 
-        const friend = await FriendModel.create(req.body)
-        res.json(friend)
+        await FriendModel.create(req.body)
+        res.json({message: "Friend request sent"})
         
     } catch (err) {
         CatchError(err, res, "Failed to send friend request")
@@ -63,5 +63,33 @@ export const suggestedFriends = async (req: SessionInterface, res: Response) => 
        
     } catch (err) { 
         CatchError(err, res, "Failed to suggest friends")
+    }
+}
+
+export const friendRequest = async (req: SessionInterface, res: Response) => {
+    try {
+        if(!req.session)
+            throw TryError("Failed to fetch friend request")
+
+        const friends = await FriendModel.find({friend: req.session.id, status: "requested"})
+        .populate("user", "fullname image")
+        res.json(friends)
+        
+    } catch (err) { 
+        CatchError(err, res, "Failed to fetch friend request")
+    }
+}
+
+export const updateFriendStatus = async (req: SessionInterface, res: Response) => {
+    try {
+        if(!req.session)
+            throw TryError("Failed to update friend status")
+
+        await FriendModel.updateOne({_id: req.params.id}, {$set: {status: req.body.status }})
+
+        res.json({message: "Friend status updated"})
+        
+    } catch (err) { 
+        CatchError(err, res, "Failed to update friend status")
     }
 }

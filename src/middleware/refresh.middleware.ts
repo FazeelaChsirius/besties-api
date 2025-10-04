@@ -13,8 +13,8 @@ const RefreshToken = async (req: SessionInterface, res: Response, next: NextFunc
 
         const user = await AuthModel.findOne({refreshToken})
 
-        if (!user) {
-            throw TryError("Failed to refresh token", 401)
+        if(!user) {
+            throw TryError("User not found, failed to refresh token", 404)
         }
 
         const today = moment()
