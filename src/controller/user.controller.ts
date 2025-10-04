@@ -48,12 +48,12 @@ export const login = async (req: Request, res: Response) => {
         const user = await AuthModel.findOne({email})
 
         if(!user)
-            throw TryError("User not found, please signup!", 401)
+            throw TryError("User not found, please signup!", 404)
         
         const isLogin = await bcrypt.compare(password, user.password)
         
         if(!isLogin)
-            throw TryError("Invalid credentials email or password is incorrect", 404)
+            throw TryError("Invalid credentials email or password is incorrect", 401)
 
         const payload = {
             id: user._id,
