@@ -18,6 +18,7 @@ import { serve, setup } from 'swagger-ui-express'
 import StatusSocket from './socket/status.socket'
 import corsConfig from './utils/cors'
 import ChatSocket from './socket/chat.socket'
+import ChatRouter from './router/chat.router'
 
 const app = express()
 const server = createServer(app)
@@ -33,7 +34,6 @@ ChatSocket(io)
  
 // Middleware
 app.use(cors(corsConfig))
-
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
@@ -43,3 +43,4 @@ app.use('/api-docs', serve, setup(SwaggerConfig))
 app.use('/auth', AuthRouter)
 app.use('/storage', AuthMiddleware, StorageRouter)
 app.use('/friend', AuthMiddleware, FriendRouter)
+app.use('/chat', ChatRouter)
