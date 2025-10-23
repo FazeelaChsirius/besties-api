@@ -2,6 +2,7 @@ import ChatModel from "../model/chat.model"
 import { Request, Response } from "express"
 import { CatchError, TryError } from "../utils/error"
 import { SessionInterface } from "../middleware/auth.middleware"
+import { downloadObject } from "../utils/s3"
 
 interface PayloadInterface {
     from: string
@@ -32,7 +33,24 @@ export const fetchChats = async (req: SessionInterface, res: Response) => {
             ]
         })
         .populate("from", "fullname email mobile")
-        res.json(chats)
+        .lean()
+
+        const modifiedChats = await Promise.all(
+            chats.map(async (item) => {
+                if(item.file) {
+                    return {
+                        ...item,
+                        file: {
+                            path: item.file.path && await downloadObject(item.file.path),
+                            type: item.file.type
+                        }
+                    }
+                } else {
+                    return item
+                }
+            })
+        )
+        res.json(modifiedChats)
         
     } catch (err) {
         CatchError(err, res, "Failed to fetch chats")
