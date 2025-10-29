@@ -1,7 +1,6 @@
 import { Server } from "socket.io"
 import { createChat } from "../controller/chat.controller"
 import { downloadObject } from "../utils/s3"
-import path from "path"
 
 const ChatSocket = (io: Server) => {
     io.on('connection', (socket) => {

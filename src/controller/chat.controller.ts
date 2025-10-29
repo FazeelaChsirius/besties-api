@@ -15,7 +15,7 @@ interface PayloadInterface {
 }
 
 export const createChat = (payload: PayloadInterface) => {
-    ChatModel.create(payload)
+    ChatModel.create(payload) 
     .catch((err) => {
         console.log(err.message)
     })
@@ -33,7 +33,7 @@ export const fetchChats = async (req: SessionInterface, res: Response) => {
             ]
         })
         .populate("from", "fullname email mobile")
-        .lean()
+        .lean()  
 
         const modifiedChats = await Promise.all(
             chats.map(async (item) => {
