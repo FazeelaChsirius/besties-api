@@ -19,6 +19,7 @@ import StatusSocket from './socket/status.socket'
 import corsConfig from './utils/cors'
 import ChatSocket from './socket/chat.socket'
 import ChatRouter from './router/chat.router'
+import VideoSocket from './socket/video.socket'
 
 const app = express()
 const server = createServer(app)
@@ -31,6 +32,7 @@ server.listen(
 const io = new Server(server, {cors: corsConfig})
 StatusSocket(io)
 ChatSocket(io)
+VideoSocket(io)
  
 // Middleware
 app.use(cors(corsConfig))
