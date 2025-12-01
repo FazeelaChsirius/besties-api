@@ -46,6 +46,7 @@ export const login = async (req: Request, res: Response) => {
     try {
         const {email, password} = req.body
         const user = await AuthModel.findOne({email})
+        console.log('user', user)
 
         if(!user)
             throw TryError("User not found, please signup!", 404)
