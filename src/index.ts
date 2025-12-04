@@ -4,7 +4,7 @@ dotenv.config()
 import mongoose from 'mongoose'
 mongoose.connect(process.env.DB!)
 
-import express from 'express'
+import express, { Request, Response } from 'express'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import cors from 'cors'
@@ -52,3 +52,6 @@ app.use('/chat', ChatRouter)
 app.use("/payment", PaymentRouter)
 app.use("/post", AuthMiddleware, PostRouter)
 app.use("/twilio", TwilioRouter)
+app.use("/hello", (req: Request, res: Response) => {
+  res.send("Hello sir")
+})
