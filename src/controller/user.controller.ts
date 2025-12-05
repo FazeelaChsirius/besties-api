@@ -26,8 +26,9 @@ const getOptions = (tokenType: TokenType) => {
     return {
         httpOnly: true,
         maxAge: tokenType === 'accesstoken' ? tenMinuteInMs : sevenDaysInMs,
-        secure: false,
-        domain: 'localhost'
+        secure: process.env.NODE_ENV === "dev" ? false : true,
+        samesite: 'none',
+        domain: process.env.NODE_ENV === "dev" ? "localhost" : process.env.CLIENT?.split("//").pop()
     }
 }
 
